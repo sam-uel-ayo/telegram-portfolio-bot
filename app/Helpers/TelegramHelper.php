@@ -29,18 +29,46 @@ class TelegramHelper
         return self::callTelegramApi('/sendMessage', $data);
     }
 
-    public static function editMessage($chatId, $text, $keyboard = null)
+    
+    public static function sendMessageReply($chatId, $text)
     {
         self::init();
         
         $data = [
             'chat_id' => $chatId,
-            'text' => $text,
-            'reply_markup' => $keyboard ? json_encode(['keyboard' => $keyboard, 'resize_keyboard' => true]) : null,
+            'text' => $text
         ];
 
         return self::callTelegramApi('/sendMessage', $data);
     }
+
+    public static function editMessage($chatId, $messageId, $text)
+    {
+        self::init();
+        
+        $data = [
+            'chat_id' => $chatId,
+            'message_id' => $messageId,
+            'text' => $text,
+        ];
+    
+        return self::callTelegramApi('/editMessageText', $data);
+    }
+
+    
+    public static function editMessageKeyboard($chatId, $messageId, $keyboard)
+    {
+        self::init();
+        
+        $data = [
+            'chat_id' => $chatId,
+            'message_id' => $messageId,
+            'reply_markup' => json_encode(['inline_keyboard' => $keyboard]),
+        ];
+    
+        return self::callTelegramApi('/editMessageReplyMarkup', $data);
+    }
+    
 
     public static function sendDocument($chatId, $filePath, $caption = '')
     {
